@@ -1,0 +1,28 @@
+{
+  "name": "student-data-server",
+  "version": "1.0.0",
+  "description": "Node.js REST API Server with 100 student dummy data records and interactive Web Portal UI",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest-api",
+    "students",
+    "dummy-data",
+    "mean",
+    "python",
+    "android",
+    "ios"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Data Hub | Node.js REST API Server</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="server"></i>
+        </div>
+        <div class="brand-text">
+          <h2>StudentData API</h2>
+          <span class="version-tag">Node.js Express Server</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-tab="students-tab">
+          <i data-lucide="users"></i>
+          <span>100 Students Portal</span>
+        </button>
+        <button class="nav-btn" data-tab="api-tab">
+          <i data-lucide="code-2"></i>
+          <span>REST API Explorer</span>
+        </button>
+        <button class="nav-btn" data-tab="stats-tab">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Tech Stack Analytics</span>
+        </button>
+      </nav>
+
+      <div class="server-status-card">
+        <div class="status-indicator online"></div>
+        <div class="status-info">
+          <span class="status-title">Server Status</span>
+          <span class="status-desc" id="server-status-text">Online (Port 3000)</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title">
+          <h1 id="page-title">Student Directory & Skill Matrix</h1>
+          <p class="subtitle">Complete backend dummy data for 100 students with mobile, email, tech stacks & subtopic skills</p>
+        </div>
+        <div class="header-actions">
+          <a href="/api/students" target="_blank" class="btn btn-outline">
+            <i data-lucide="external-link"></i> Raw JSON API
+          </a>
+        </div>
+      </header>
+
+      <!-- TAB 1: STUDENTS DIRECTORY -->
+      <section id="students-tab" class="tab-content active">
+        <!-- Stats Summary Bar -->
+        <div class="stats-grid" id="stats-summary-bar">
+          <div class="stat-card">
+            <div class="stat-icon purple"><i data-lucide="user-check"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="stat-total-students">100</span>
+              <span class="stat-label">Total Students</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon blue"><i data-lucide="layers"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="stat-stacks-count">8 Stacks</span>
+              <span class="stat-label">Tech Stacks (MEAN, Python, Android...)</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon green"><i data-lucide="cpu"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="stat-subtopics-count">1,200+</span>
+              <span class="stat-label">Subtopic Skills</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon orange"><i data-lucide="award"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="stat-avg-gpa">8.65</span>
+              <span class="stat-label">Avg GPA Score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="toolbar">
+          <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="text" id="search-input" placeholder="Search by name, email, phone, tech stack or subtopic skill (e.g., RxJS, Kotlin, Django)...">
+            <button id="clear-search-btn" class="clear-btn" style="display:none;"><i data-lucide="x"></i></button>
+          </div>
+
+          <div class="view-toggles">
+            <button class="icon-btn active" id="view-grid-btn" title="Grid View"><i data-lucide="grid"></i></button>
+            <button class="icon-btn" id="view-table-btn" title="Table View"><i data-lucide="list"></i></button>
+          </div>
+        </div>
+
+        <!-- Tech Stack Pill Filter Bar -->
+        <div class="tech-filter-bar">
+          <span class="filter-label"><i data-lucide="filter"></i> Tech Stack:</span>
+          <div class="pill-group" id="tech-stack-pills">
+            <button class="pill-btn active" data-stack="ALL">All Stacks (100)</button>
+            <button class="pill-btn" data-stack="MEAN Stack">MEAN Stack</button>
+            <button class="pill-btn" data-stack="MERN Stack">MERN Stack</button>
+            <button class="pill-btn" data-stack="Python Stack">Python Stack</button>
+            <button class="pill-btn" data-stack="Android Stack">Android Stack</button>
+            <button class="pill-btn" data-stack="iOS Stack">iOS Stack</button>
+            <button class="pill-btn" data-stack="Flutter Stack">Flutter Stack</button>
+            <button class="pill-btn" data-stack="Java Enterprise">Java Enterprise</button>
+            <button class="pill-btn" data-stack="Data Science & AI">Data Science & AI</button>
+          </div>
+        </div>
+
+        <!-- Counter Header -->
+        <div class="results-header">
+          <span id="results-count-text">Showing 100 Students</span>
+          <span class="api-tip"><i data-lucide="info"></i> Powered by Express REST Endpoint <code>GET /api/students</code></span>
+        </div>
+
+        <!-- Student Grid Container -->
+        <div class="students-grid" id="students-grid-container">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Student Table Container -->
+        <div class="table-responsive hidden" id="students-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Contact Details</th>
+                <th>Main Tech Stack</th>
+                <th>Location</th>
+                <th>Skills Overview</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="students-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 2: REST API EXPLORER -->
+      <section id="api-tab" class="tab-content hidden">
+        <div class="api-explorer-container">
+          <div class="api-sidebar-list">
+            <h3>API Endpoints</h3>
+            <div class="endpoint-item active" data-endpoint="all">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students</span>
+              <span class="endpoint-desc">List all 100 students</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="filter-stack">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students?techStack=MEAN Stack</span>
+              <span class="endpoint-desc">Filter by MEAN stack</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="filter-python">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students?techStack=Python Stack</span>
+              <span class="endpoint-desc">Filter by Python stack</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="filter-android">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students?techStack=Android Stack</span>
+              <span class="endpoint-desc">Filter by Android stack</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="filter-ios">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students?techStack=iOS Stack</span>
+              <span class="endpoint-desc">Filter by iOS stack</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="search-skill">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students?skill=RxJS</span>
+              <span class="endpoint-desc">Search subtopic skill</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="single">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/students/STU001</span>
+              <span class="endpoint-desc">Get student STU001 by ID</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="stats">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/stats</span>
+              <span class="endpoint-desc">Aggregate server stats</span>
+            </div>
+            <div class="endpoint-item" data-endpoint="health">
+              <span class="method-badge get">GET</span>
+              <span class="endpoint-url">/api/health</span>
+              <span class="endpoint-desc">Server Health check</span>
+            </div>
+          </div>
+
+          <div class="api-runner-panel">
+            <div class="url-input-bar">
+              <span class="method-badge get">GET</span>
+              <input type="text" id="api-url-input" value="/api/students">
+              <button class="btn btn-primary" id="execute-api-btn">
+                <i data-lucide="play"></i> Execute
+              </button>
+            </div>
+
+            <div class="response-header">
+              <div class="response-status">
+                <span>Status: <strong id="api-status-code">200 OK</strong></span>
+                <span>Time: <strong id="api-response-time">12ms</strong></span>
+              </div>
+              <button class="btn btn-sm btn-outline" id="copy-json-btn">
+                <i data-lucide="copy"></i> Copy JSON
+              </button>
+            </div>
+
+            <div class="code-viewer">
+              <pre><code id="json-response-code">// Click Execute to test REST API call...</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: STATS & ANALYTICS -->
+      <section id="stats-tab" class="tab-content hidden">
+        <div class="analytics-container">
+          <div class="chart-card">
+            <h3><i data-lucide="pie-chart"></i> Students Distribution by Tech Stack</h3>
+            <div class="stack-progress-list" id="stack-breakdown-list">
+              <!-- Dynamically rendered progress bars -->
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3><i data-lucide="map-pin"></i> Top Student Locations</h3>
+            <div class="location-grid" id="location-breakdown-list">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- STUDENT DETAIL MODAL -->
+  <div class="modal-backdrop hidden" id="student-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close-btn"><i data-lucide="x"></i></button>
+
+      <div class="modal-header">
+        <div class="modal-avatar" id="modal-avatar">ST</div>
+        <div class="modal-user-info">
+          <h2 id="modal-name">Student Name</h2>
+          <span class="modal-id" id="modal-id">STU001</span>
+          <span class="tech-badge" id="modal-stack">MEAN Stack</span>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Contact & Basic Info -->
+        <div class="info-section-grid">
+          <div class="info-item">
+            <i data-lucide="mail"></i>
+            <div>
+              <span class="info-label">Email ID</span>
+              <span class="info-value" id="modal-email">email@example.com</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i data-lucide="phone"></i>
+            <div>
+              <span class="info-label">Mobile Number</span>
+              <span class="info-value" id="modal-phone">+91 98765 43210</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i data-lucide="map-pin"></i>
+            <div>
+              <span class="info-label">Location</span>
+              <span class="info-value" id="modal-location">Kochi</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i data-lucide="star"></i>
+            <div>
+              <span class="info-label">GPA Score / Exp</span>
+              <span class="info-value" id="modal-gpa">8.75 / Intermediate</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Detailed Skills & Subtopics Tree -->
+        <div class="skills-section">
+          <h3><i data-lucide="cpu"></i> Skills & Subtopics Matrix</h3>
+          <div class="skills-tree" id="modal-skills-tree">
+            <!-- Dynamically populated categories & subtopics -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modal-close-bottom">Close Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

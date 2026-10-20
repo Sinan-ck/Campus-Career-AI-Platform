@@ -1,0 +1,23 @@
+{
+  "name": "campus-career-ai-platform",
+  "version": "1.0.0",
+  "description": "Unified AI-Powered Campus Placement & Career Intelligence Platform with Claude Desktop MCP Server, Express REST APIs, and Web Portals",
+  "scripts": {
+    "start:student": "cd student-server && node server.js",
+    "start:company": "cd company-server && node server.js",
+    "start:all": "node -e \"const { spawn } = require('child_process'); spawn('node', ['student-server/server.js'], { stdio: 'inherit' }); spawn('node', ['company-server/server.js'], { stdio: 'inherit' });\"",
+    "test:mcp": "node claude-mcp-server/test.js",
+    "setup:claude": "bash claude-mcp-server/install_claude_config.sh"
+  },
+  "keywords": [
+    "claude-mcp",
+    "model-context-protocol",
+    "campus-recruitment",
+    "ai-job-matching",
+    "rest-api",
+    "express",
+    "nodejs"
+  ],
+  "author": "Mohammed Sinan CK",
+  "license": "MIT"
+}

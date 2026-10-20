@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "campus-career-server": {
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/mohammedsinan/career-mcp-server/index.js"
+      ]
+    }
+  }
+}

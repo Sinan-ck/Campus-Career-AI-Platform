@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Jobs Portal & REST API Backend Server</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-code-branch"></i></div>
+        <div class="brand-text">
+          <h1>TechJobs<span>API</span></h1>
+          <span class="version-tag">Node.js Express Server</span>
+        </div>
+      </div>
+
+      <div class="nav-metrics">
+        <div class="metric-chip">
+          <span class="dot pulse"></span>
+          <span class="metric-label">Server:</span>
+          <span class="metric-value">Active (Port 5000)</span>
+        </div>
+        <div class="metric-chip highlight">
+          <i class="fa-solid fa-briefcase"></i>
+          <span class="metric-value" id="totalJobCountHeader">100 Openings</span>
+        </div>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-btn active" id="tabJobsBtn"><i class="fa-solid fa-layer-group"></i> Job Portal</button>
+        <button class="nav-btn" id="tabApiBtn"><i class="fa-solid fa-terminal"></i> REST API Tester</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Statistics Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> 100+ Live Tech Openings & REST APIs</span>
+        <h2>Explore Tech Vacancies & REST API Server</h2>
+        <p>MERN Stack, MEAN Stack, Python/Django, iOS (Swift), Android (Kotlin), DevOps & Cloud, AI/ML vacancies ready for REST API consumption.</p>
+      </div>
+
+      <!-- Quick Stats Counters -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card glass loading-skeleton">
+          <div class="stat-icon mern"><i class="fa-brands fa-react"></i></div>
+          <div class="stat-info">
+            <h4 id="countMern">--</h4>
+            <p>MERN Stack</p>
+          </div>
+        </div>
+        <div class="stat-card glass loading-skeleton">
+          <div class="stat-icon mean"><i class="fa-brands fa-angular"></i></div>
+          <div class="stat-info">
+            <h4 id="countMean">--</h4>
+            <p>MEAN Stack</p>
+          </div>
+        </div>
+        <div class="stat-card glass loading-skeleton">
+          <div class="stat-icon python"><i class="fa-brands fa-python"></i></div>
+          <div class="stat-info">
+            <h4 id="countPython">--</h4>
+            <p>Python / Django</p>
+          </div>
+        </div>
+        <div class="stat-card glass loading-skeleton">
+          <div class="stat-icon mobile"><i class="fa-brands fa-apple"></i></div>
+          <div class="stat-info">
+            <h4 id="countMobile">--</h4>
+            <p>iOS & Android</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-container">
+
+    <!-- VIEW 1: JOB LISTINGS & FILTERS -->
+    <div id="jobsView" class="view-panel active">
+      
+      <!-- Filter Bar -->
+      <div class="filter-wrapper glass">
+        <div class="search-row">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search by Job Title, Company, Skill (e.g. React, Python, SwiftUI)...">
+            <button id="clearSearchBtn" class="clear-btn"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="select-group">
+            <select id="locationSelect">
+              <option value="">All Locations</option>
+              <option value="Kochi">Kochi, Kerala</option>
+              <option value="Trivandrum">Trivandrum, Kerala</option>
+              <option value="Calicut">Calicut, Kerala</option>
+              <option value="Bangalore">Bangalore, Karnataka</option>
+              <option value="Remote">Remote (India)</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Pune">Pune</option>
+            </select>
+
+            <select id="expSelect">
+              <option value="">All Experience</option>
+              <option value="Junior">Junior (0-2 yrs)</option>
+              <option value="Mid-Level">Mid-Level (2-5 yrs)</option>
+              <option value="Senior">Senior (5-8 yrs)</option>
+              <option value="Lead">Lead / Architect (8+ yrs)</option>
+            </select>
+
+            <select id="jobTypeSelect">
+              <option value="">All Job Types</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tech Stack Category Tabs -->
+        <div class="stack-chips-scroll" id="stackChipsContainer">
+          <button class="chip active" data-stack="">All Stacks (100)</button>
+          <button class="chip" data-stack="MERN Stack"><i class="fa-brands fa-react"></i> MERN Stack</button>
+          <button class="chip" data-stack="MEAN Stack"><i class="fa-brands fa-angular"></i> MEAN Stack</button>
+          <button class="chip" data-stack="Python / Django"><i class="fa-brands fa-python"></i> Python / Django</button>
+          <button class="chip" data-stack="iOS Development"><i class="fa-brands fa-apple"></i> iOS (Swift)</button>
+          <button class="chip" data-stack="Android Development"><i class="fa-brands fa-android"></i> Android (Kotlin)</button>
+          <button class="chip" data-stack="DevOps & Cloud"><i class="fa-solid fa-server"></i> DevOps & Cloud</button>
+          <button class="chip" data-stack="Data Science & AI"><i class="fa-solid fa-brain"></i> AI & Data Science</button>
+          <button class="chip" data-stack="Flutter / Mobile"><i class="fa-solid fa-mobile-screen"></i> Flutter / Mobile</button>
+          <button class="chip" data-stack="Java / Spring Boot"><i class="fa-brands fa-java"></i> Java / Spring</button>
+          <button class="chip" data-stack="Go / Microservices"><i class="fa-solid fa-bolt"></i> Go / Microservices</button>
+        </div>
+      </div>
+
+      <!-- Results info -->
+      <div class="results-header">
+        <p id="resultsCountText">Showing <strong>100</strong> job vacancies</p>
+        <div class="api-endpoint-badge">
+          <span class="method get">GET</span>
+          <code id="activeApiUrl">/api/jobs</code>
+        </div>
+      </div>
+
+      <!-- Job Grid Container -->
+      <div class="jobs-grid" id="jobsGridContainer">
+        <!-- Dynamic Job Cards rendered via JS -->
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: INTERACTIVE REST API TESTER -->
+    <div id="apiView" class="view-panel">
+      <div class="api-tester-card glass">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-terminal"></i> Interactive REST API Client</h3>
+          <p>Send real HTTP requests directly to your Node.js Express backend and inspect JSON responses.</p>
+        </div>
+
+        <div class="api-request-bar">
+          <select id="apiMethodSelect" class="method-select">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <input type="text" id="apiUrlInput" value="http://localhost:5000/api/jobs" placeholder="http://localhost:5000/api/jobs">
+          <button id="sendApiRequestBtn" class="primary-btn"><i class="fa-solid fa-paper-plane"></i> Send Request</button>
+        </div>
+
+        <!-- Quick Endpoint Presets -->
+        <div class="presets-row">
+          <span>Preset Requests:</span>
+          <button class="preset-btn" data-method="GET" data-url="/api/jobs">Get All 100 Jobs</button>
+          <button class="preset-btn" data-method="GET" data-url="/api/jobs/JOB-1001">Get Job #JOB-1001</button>
+          <button class="preset-btn" data-method="GET" data-url="/api/jobs?category=MERN%20Stack">Filter MERN Jobs</button>
+          <button class="preset-btn" data-method="GET" data-url="/api/jobs?location=Kochi">Filter Kochi Jobs</button>
+          <button class="preset-btn" data-method="GET" data-url="/api/jobs/stats/summary">Summary Statistics API</button>
+        </div>
+
+        <!-- Request Body Input (Hidden for GET) -->
+        <div id="postBodyWrapper" class="post-body-wrapper hidden">
+          <label><i class="fa-solid fa-code"></i> Request Body (JSON for POST/PUT):</label>
+          <textarea id="apiBodyInput" rows="6" placeholder='{ "title": "Lead MERN Engineer", "companyName": "TechNova", "techStack": "MERN Stack", "location": "Kochi, Kerala" }'></textarea>
+        </div>
+
+        <!-- cURL Command Box -->
+        <div class="curl-wrapper">
+          <div class="curl-header">
+            <span><i class="fa-solid fa-terminal"></i> Equivalent cURL Command:</span>
+            <button id="copyCurlBtn" class="copy-btn"><i class="fa-regular fa-copy"></i> Copy cURL</button>
+          </div>
+          <pre id="curlDisplay">curl -X GET "http://localhost:5000/api/jobs"</pre>
+        </div>
+
+        <!-- Response Viewer -->
+        <div class="response-container">
+          <div class="response-header">
+            <div class="res-status">
+              <span>Response Status:</span>
+              <span id="responseStatusBadge" class="status-badge 200">200 OK</span>
+              <span id="responseTimeBadge" class="time-badge"><i class="fa-solid fa-clock"></i> 12 ms</span>
+            </div>
+            <button id="copyResponseBtn" class="copy-btn"><i class="fa-regular fa-copy"></i> Copy JSON</button>
+          </div>
+          <pre id="jsonOutput" class="json-code-box">Loading response...</pre>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JOB DETAIL MODAL -->
+  <div class="modal-overlay" id="jobModalOverlay">
+    <div class="modal-card glass" id="jobModalCard">
+      <button class="modal-close-btn" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-header" id="modalHeader">
+        <!-- Dynamic Header -->
+      </div>
+
+      <div class="modal-body" id="modalBody">
+        <!-- Dynamic Job Details -->
+      </div>
+
+      <div class="modal-footer" id="modalFooter">
+        <button class="secondary-btn" id="testInApiBtn"><i class="fa-solid fa-terminal"></i> Test Job API Endpoint</button>
+        <button class="primary-btn" id="copyModalApiUrlBtn"><i class="fa-solid fa-link"></i> Copy REST API Link</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
