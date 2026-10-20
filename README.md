@@ -141,15 +141,10 @@ Once connected to Claude Desktop, you can ask questions naturally:
 * *"Give me an executive summary of our student tech stacks versus available company vacancies."*
 
 ---
-
-## 👤 Author
-
+ 
 * **Mohammed Sinan CK**  
 * GitHub: [@Sinan-ck](https://github.com/Sinan-ck)
 * Email: mohammedsinan123ck@gmail.com
 
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+ 
