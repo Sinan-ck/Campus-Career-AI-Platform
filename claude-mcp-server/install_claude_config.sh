@@ -3,7 +3,7 @@
 # Configuration installer for Claude Desktop MCP Server
 CONFIG_DIR="$HOME/Library/Application Support/Claude"
 CONFIG_FILE="$CONFIG_DIR/claude_desktop_config.json"
-SOURCE_CONFIG="/Users/mohammedsinan/career-mcp-server/claude_desktop_config.json"
+SOURCE_CONFIG="/Users/mohammedsinan/Campus-Career-AI-Platform/claude-mcp-server/claude_desktop_config.json"
 
 mkdir -p "$CONFIG_DIR"
 

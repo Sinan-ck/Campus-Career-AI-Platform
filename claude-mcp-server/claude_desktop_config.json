@@ -3,7 +3,7 @@
     "campus-career-server": {
       "command": "/opt/homebrew/bin/node",
       "args": [
-        "/Users/mohammedsinan/career-mcp-server/index.js"
+        "/Users/mohammedsinan/Campus-Career-AI-Platform/claude-mcp-server/index.js"
       ]
     }
   }
